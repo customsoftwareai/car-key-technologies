@@ -50,55 +50,21 @@
   <div class="wrap">
     <div class="split">
       <div class="reveal">
-        <div id="form-success" class="form-success">Thanks &mdash; your request has been received. Our team will follow up shortly.</div>
         <div class="form-card">
-          <form id="contact-form">
-            <div class="form-grid">
-              <div class="field">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required>
-              </div>
-              <div class="field">
-                <label for="company">Company / Dealership (optional)</label>
-                <input type="text" id="company" name="company">
-              </div>
-              <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-              </div>
-              <div class="field">
-                <label for="phone">Phone</label>
-                <input type="tel" id="phone" name="phone" required>
-              </div>
-              <div class="field full">
-                <label for="inquiry">What do you need help with?</label>
-                <select id="inquiry" name="inquiry">
-                  <option>Lost or missing key fob</option>
-                  <option>All-keys-lost recovery</option>
-                  <option>Smart key / remote programming</option>
-                  <option>Immobilizer or security gateway service</option>
-                  <option>Fleet key management program</option>
-                  <option>Dealership wholesale key supply</option>
-                  <option>Become a partner technician</option>
-                  <option>Something else</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="vehicle">Vehicle Make &amp; Model</label>
-                <input type="text" id="vehicle" name="vehicle" placeholder="e.g. Ford F-150, 2021">
-              </div>
-              <div class="field">
-                <label for="location">City / State or Province</label>
-                <input type="text" id="location" name="location">
-              </div>
-              <div class="field full">
-                <label for="message">Details</label>
-                <textarea id="message" name="message" placeholder="Tell us more about the situation..."></textarea>
-              </div>
+          <div class="form-tabs" role="tablist">
+            <button type="button" class="form-tab-btn active" id="tab-btn-service" role="tab" aria-selected="true" aria-controls="tab-panel-service">Request Service</button>
+            <button type="button" class="form-tab-btn" id="tab-btn-partner" role="tab" aria-selected="false" aria-controls="tab-panel-partner">Become a Partner</button>
+          </div>
+          <div class="form-tab-panel active" id="tab-panel-service" role="tabpanel" aria-labelledby="tab-btn-service">
+            <div class="form-embed">
+              <iframe aria-label="Service Request" frameborder="0" style="height:900px;width:99%;border:none;" src="https://forms.zohopublic.com/access/form/ServiceRequest/formperma/aoUHM3QTWY2jhJMJXWWXNg8bwTWM-1CiPbafv82naGc"></iframe>
             </div>
-            <button type="submit" class="btn btn-accent" style="width:100%;">Submit Request</button>
-            <p class="form-note">By submitting, you agree to be contacted by Car Key Technologies regarding your request.</p>
-          </form>
+          </div>
+          <div class="form-tab-panel" id="tab-panel-partner" role="tabpanel" aria-labelledby="tab-btn-partner">
+            <div class="form-embed">
+              <iframe aria-label="Partner Application" frameborder="0" style="height:900px;width:99%;border:none;" src="https://forms.zohopublic.com/access/form/PartnerApplication/formperma/0it25ZJLpAhqVu3-XM4I4PCyKd2qC3gaUHEDOsWvd5I"></iframe>
+            </div>
+          </div>
         </div>
       </div>
       <div class="reveal">
@@ -119,7 +85,7 @@
           <div class="card" style="padding:26px;">
             <div class="icon" style="margin-bottom:14px;width:44px;height:44px;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
             <h3 style="font-size:17px;">Technicians &amp; Locksmiths</h3>
-            <p style="font-size:14px;">Interested in joining our strategic partner network across the U.S. and Canada? Select "Become a partner technician" above.</p>
+            <p style="font-size:14px;">Interested in joining our strategic partner network across the U.S. and Canada? Switch to the "Become a Partner" tab above.</p>
           </div>
         </div>
       </div>

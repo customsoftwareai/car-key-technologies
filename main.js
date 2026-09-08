@@ -34,17 +34,29 @@ document.addEventListener('DOMContentLoaded', function () {
     el.textContent = new Date().getFullYear();
   });
 
-  // Contact form (static site — client-side confirmation only)
-  var form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var success = document.getElementById('form-success');
-      if (success) {
-        success.classList.add('show');
-        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      form.reset();
+  // Contact page form tabs (Request Service / Become a Partner)
+  var tabBtns = document.querySelectorAll('.form-tab-btn');
+  if (tabBtns.length) {
+    tabBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panelId = btn.getAttribute('aria-controls');
+        document.querySelectorAll('.form-tab-btn').forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.form-tab-panel').forEach(function (p) {
+          p.classList.remove('active');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        var panel = document.getElementById(panelId);
+        if (panel) { panel.classList.add('active'); }
+      });
     });
+    // Deep link support: contact.html#partner opens the partner application tab
+    if (window.location.hash === '#partner') {
+      var partnerBtn = document.getElementById('tab-btn-partner');
+      if (partnerBtn) { partnerBtn.click(); }
+    }
   }
 });

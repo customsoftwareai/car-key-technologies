@@ -24,6 +24,44 @@
 :root[data-theme="dark"] .category-nav { background: rgba(18, 18, 21, 0.88); }
 :root[data-theme="dark"] .form-success { background: #0f2417; border-color: #1f4a2c; color: #7cd992; }
 
+/* ---------- Fix: sections that are permanently dark regardless of theme ----------
+   .nav, .hero, .page-hero, .footer, .cta-banner, .section-dark, .card-dark, and the
+   accent/gradient buttons all get their background from --black/--near-black/
+   --gradient-dark/--gradient-brand or a hardcoded rgba(), none of which change with
+   the theme. Their text, however, was styled with var(--white)/var(--ink) in
+   styles.css, which DOES change with the theme (and with high-contrast mode, since
+   that also sets data-theme="dark" — see a11y.js applyTheme()). Left alone, dark
+   mode remaps --white to a near-black surface color, turning this fixed-white text
+   into near-invisible near-black-on-black. Pin it back to real white here instead
+   of remapping the shared token, since the token is also legitimately used for
+   backgrounds elsewhere on the same page. */
+:root[data-theme="dark"] .brand,
+:root[data-theme="dark"] .nav-links a:hover,
+:root[data-theme="dark"] .nav-links a.active,
+:root[data-theme="dark"] .nav-toggle,
+:root[data-theme="dark"] .hero,
+:root[data-theme="dark"] .hero h1,
+:root[data-theme="dark"] .hero-stats .stat b,
+:root[data-theme="dark"] .page-hero,
+:root[data-theme="dark"] .page-hero h1,
+:root[data-theme="dark"] .phone-callout a,
+:root[data-theme="dark"] .section-dark h2,
+:root[data-theme="dark"] .section-dark h3,
+:root[data-theme="dark"] .card-dark h3,
+:root[data-theme="dark"] .stat-bar .stat b,
+:root[data-theme="dark"] .cta-banner,
+:root[data-theme="dark"] .cta-banner h2,
+:root[data-theme="dark"] .cta-phone a,
+:root[data-theme="dark"] .footer-phone a,
+:root[data-theme="dark"] .footer a:hover,
+:root[data-theme="dark"] .btn-accent,
+:root[data-theme="dark"] .step::before {
+  color: #ffffff;
+}
+:root[data-theme="dark"] .phone-callout .icon-circle svg {
+  stroke: #ffffff;
+}
+
 /* ---------- High-contrast mode (WCAG AA/AAA target): black / white / yellow ---------- */
 html.a11y-contrast-high {
   --black: #000000;

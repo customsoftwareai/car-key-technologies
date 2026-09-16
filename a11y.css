@@ -129,6 +129,18 @@ html.a11y-contrast-high .btn-accent { background: #000000 !important; }
    testing. Found only by manually computing contrast on every button-styled link,
    bypassing that blind spot. Restore the button's intended black text. */
 html.a11y-contrast-high .btn-primary { color: #000000 !important; }
+/* Fix: the skip links ("Skip to main content" etc.) have their own hardcoded
+   background (#0071e3, the brand blue — not a themed token, same in every mode) and
+   their own "color: #fff !important". The blanket high-contrast link rule above
+   still wins on specificity (html.a11y-contrast-high a beats .a11y-skip-link alone),
+   repainting that text yellow — yellow-on-blue at 14px bold measures 3.28:1, under
+   the 4.5:1 small-text minimum. Found by manually computing contrast for every
+   link/button on the page (axe-core wouldn't have flagged this one either: skip
+   links are only reachable/visible via keyboard focus, which most contrast tooling,
+   including axe-core's automated color-contrast rule, does not simulate). Give them
+   a black background in high-contrast mode instead, matching the theme's other
+   buttons (yellow-on-black, 14.67:1). */
+html.a11y-contrast-high .a11y-skip-link { background: #000000 !important; }
 
 /* ---------- Baseline WCAG fixes (always on, not gated by the menu) ---------- */
 .section p a, .lede a, .card p a, .card-dark p a, .form-note a, .about-copy p a {

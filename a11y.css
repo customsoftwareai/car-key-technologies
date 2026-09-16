@@ -1,0 +1,260 @@
+/* ==========================================================================
+   Car Key Technologies — Accessibility widget, skip links, focus states,
+   and light/dark/high-contrast theme system.
+   Loaded after styles.css so these rules can override site tokens.
+   ========================================================================== */
+
+/* ---------- Dark theme: re-map the existing design tokens ----------
+   styles.css already reads color from CSS custom properties almost
+   everywhere, so re-defining the tokens re-themes the whole site
+   without touching every selector. The dark hero/nav/footer sections
+   use --black/--near-black directly and are intentionally left as-is
+   in both themes. */
+:root[data-theme="dark"] {
+  --white: #17171b;
+  --off-white: #1c1c21;
+  --ink: #f2f2f4;
+  --gray-900: #e7e7ea;
+  --gray-700: #c6c6cc;
+  --gray-500: #9d9da5;
+  --gray-300: #6d6d75;
+  --gray-200: #3a3a40;
+  --gray-100: #232327;
+}
+:root[data-theme="dark"] .category-nav { background: rgba(18, 18, 21, 0.88); }
+:root[data-theme="dark"] .form-success { background: #0f2417; border-color: #1f4a2c; color: #7cd992; }
+
+/* ---------- High-contrast mode (WCAG AA/AAA target): black / white / yellow ---------- */
+html.a11y-contrast-high {
+  --black: #000000;
+  --near-black: #000000;
+  --ink: #ffffff;
+  --white: #000000;
+  --off-white: #000000;
+  --gray-900: #ffffff;
+  --gray-700: #f2f2f2;
+  --gray-500: #e2e2e2;
+  --gray-300: #cfcfcf;
+  --gray-200: #555555;
+  --gray-100: #1a1a1a;
+  --blue: #66b3ff;
+  --blue-dark: #3388ff;
+  --cyan: #7fe6ff;
+  --gradient-brand: #1a73e8;
+  --gradient-dark: #000000;
+  --shadow-soft: none;
+  --shadow-card: none;
+}
+html.a11y-contrast-high * { text-shadow: none !important; box-shadow: none !important; }
+html.a11y-contrast-high body { background: #000 !important; }
+html.a11y-contrast-high a { color: #ffd400 !important; text-decoration: underline !important; }
+html.a11y-contrast-high .btn { border: 2px solid #fff !important; }
+html.a11y-contrast-high .card,
+html.a11y-contrast-high .card-dark,
+html.a11y-contrast-high .form-card { border: 2px solid #fff !important; }
+
+/* ---------- Baseline WCAG fixes (always on, not gated by the menu) ---------- */
+.section p a, .lede a, .card p a, .card-dark p a, .form-note a, .about-copy p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Visible focus indicator for every interactive element, at all times */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid #0071e3;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+html[data-theme="dark"] a:focus-visible, html[data-theme="dark"] button:focus-visible,
+html[data-theme="dark"] input:focus-visible, html[data-theme="dark"] select:focus-visible,
+html[data-theme="dark"] textarea:focus-visible, html[data-theme="dark"] [tabindex]:focus-visible {
+  outline-color: #29c1ff;
+}
+
+/* ---------- Skip links ---------- */
+#a11y-skip-links { position: relative; z-index: 10000; }
+.a11y-skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  background: #0071e3;
+  color: #fff !important;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none !important;
+  transition: top 0.15s ease;
+  z-index: 10000;
+}
+.a11y-skip-link:nth-of-type(2) { left: 220px; }
+.a11y-skip-link:nth-of-type(3) { left: 420px; }
+.a11y-skip-link:focus { top: 12px; outline: 3px solid #fff; outline-offset: 2px; }
+
+/* ---------- Quick theme toggle (mounted into .nav-cta) ---------- */
+.a11y-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+.a11y-theme-toggle:hover { background: rgba(255, 255, 255, 0.16); }
+.a11y-theme-toggle-standalone { position: absolute; top: 14px; right: 32px; z-index: 50; }
+
+/* ---------- Floating accessibility launcher ---------- */
+.a11y-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0071e3 0%, #29c1ff 100%);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 113, 227, 0.4);
+  cursor: pointer;
+  justify-content: center;
+}
+.a11y-launcher:hover { transform: translateY(-2px); }
+.a11y-launcher-label {
+  position: absolute;
+  width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .a11y-launcher { left: 50%; right: auto; transform: translateX(-50%); bottom: 18px; }
+  .a11y-launcher:hover { transform: translateX(-50%) translateY(-2px); }
+}
+
+/* ---------- Overlay + dialog panel ---------- */
+.a11y-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10, 10, 12, 0.5);
+  z-index: 9999;
+}
+.a11y-dialog {
+  position: fixed;
+  right: 24px;
+  bottom: 92px;
+  z-index: 10000;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(720px, calc(100vh - 120px));
+  overflow-y: auto;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--gray-100);
+}
+@media (max-width: 640px) {
+  .a11y-dialog { left: 16px; right: 16px; bottom: 84px; width: auto; }
+}
+.a11y-dialog-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px; border-bottom: 1px solid var(--gray-100);
+  position: sticky; top: 0; background: var(--white);
+}
+.a11y-dialog-header h2 { font-size: 17px; margin: 0; }
+.a11y-close {
+  border: none; background: var(--gray-100); color: var(--ink);
+  width: 32px; height: 32px; border-radius: 999px; font-size: 20px;
+  line-height: 1; cursor: pointer;
+}
+.a11y-dialog-body { padding: 18px 20px 24px; }
+.a11y-group { margin-bottom: 22px; }
+.a11y-group h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-500); margin: 0 0 10px; }
+.a11y-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.a11y-btn {
+  border: 1px solid var(--gray-200); background: var(--off-white); color: var(--ink);
+  border-radius: 8px; padding: 8px 12px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.a11y-btn:hover { border-color: var(--blue); }
+.a11y-btn-text { font-weight: 500; }
+.a11y-btn-reset { width: 100%; justify-content: center; display: flex; }
+.a11y-value { min-width: 52px; text-align: center; font-weight: 700; }
+.a11y-radio, .a11y-checkbox {
+  display: flex; align-items: center; gap: 8px; font-size: 14px;
+  padding: 8px 10px; border-radius: 8px; border: 1px solid var(--gray-100); cursor: pointer;
+}
+.a11y-checkbox { margin-bottom: 8px; }
+.a11y-note { font-size: 12px; color: var(--gray-500); margin: 6px 0 0; }
+.a11y-disclaimer { border-top: 1px solid var(--gray-100); padding-top: 14px; margin-top: 4px; }
+.a11y-disclaimer a { color: var(--blue); text-decoration: underline; }
+.a11y-actions { margin-top: 4px; }
+
+/* ---------- Text size / line spacing tokens ---------- */
+html.a11y-text-110 body { font-size: 1.1em; }
+html.a11y-text-125 body { font-size: 1.25em; }
+html.a11y-text-150 body { font-size: 1.5em; }
+html.a11y-text-175 body { font-size: 1.75em; }
+html.a11y-text-200 body { font-size: 2em; }
+
+html.a11y-line-plus20 body { line-height: 1.8; }
+html.a11y-line-plus40 body { line-height: 2.1; }
+html.a11y-line-plus20 p, html.a11y-line-plus40 p { line-height: inherit; }
+
+/* ---------- Highlight links ---------- */
+html.a11y-highlight-links a:not(.btn):not(.nav-toggle) {
+  background: rgba(255, 214, 0, 0.35);
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+/* ---------- Dyslexia-friendly font ---------- */
+html.a11y-dyslexia-font body,
+html.a11y-dyslexia-font input,
+html.a11y-dyslexia-font select,
+html.a11y-dyslexia-font textarea {
+  font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, Arial, sans-serif !important;
+}
+
+/* ---------- Reading guide ---------- */
+#a11y-reading-guide-bar {
+  position: fixed;
+  left: 0; right: 0;
+  height: 44px;
+  background: rgba(255, 214, 0, 0.22);
+  border-top: 2px solid rgba(255, 180, 0, 0.85);
+  border-bottom: 2px solid rgba(255, 180, 0, 0.85);
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* ---------- Big cursor ---------- */
+html.a11y-big-cursor, html.a11y-big-cursor * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"><path d="M4 2l14 8-6 2 4 7-3 1.6-4-7-4.5 4.4z" fill="black" stroke="white" stroke-width="1.2"/></svg>') 4 4, auto !important;
+}
+
+/* ---------- Enhanced always-visible focus ring ---------- */
+html.a11y-focus-ring a:focus, html.a11y-focus-ring button:focus,
+html.a11y-focus-ring input:focus, html.a11y-focus-ring select:focus,
+html.a11y-focus-ring textarea:focus, html.a11y-focus-ring [tabindex]:focus {
+  outline: 4px solid #ffd400 !important;
+  outline-offset: 3px !important;
+}
+
+/* ---------- Reduce motion ---------- */
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+html.a11y-reduce-motion .reveal { opacity: 1 !important; transform: none !important; }

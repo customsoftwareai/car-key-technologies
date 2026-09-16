@@ -26,7 +26,7 @@
 
 /* ---------- Fix: sections that are permanently dark regardless of theme ----------
    .nav, .hero, .page-hero, .footer, .cta-banner, .section-dark, .card-dark, and the
-   accent/gradient buttons all get their background from --black/--near-black/
+   ghost/accent/gradient buttons all get their background from --black/--near-black/
    --gradient-dark/--gradient-brand or a hardcoded rgba(), none of which change with
    the theme. Their text, however, was styled with var(--white)/var(--ink) in
    styles.css, which DOES change with the theme (and with high-contrast mode, since
@@ -42,6 +42,7 @@
 :root[data-theme="dark"] .hero,
 :root[data-theme="dark"] .hero h1,
 :root[data-theme="dark"] .hero-stats .stat b,
+:root[data-theme="dark"] .btn-ghost,
 :root[data-theme="dark"] .page-hero,
 :root[data-theme="dark"] .page-hero h1,
 :root[data-theme="dark"] .phone-callout a,

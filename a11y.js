@@ -181,6 +181,7 @@
     var overlay = document.createElement('div');
     overlay.id = 'a11y-overlay';
     overlay.className = 'a11y-overlay';
+    overlay.hidden = true;
     document.body.appendChild(overlay);
 
     var dialog = buildDialog(landmarks);

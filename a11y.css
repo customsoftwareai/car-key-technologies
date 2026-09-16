@@ -142,6 +142,20 @@ html.a11y-contrast-high .btn-primary { color: #000000 !important; }
    buttons (yellow-on-black, 14.67:1). */
 html.a11y-contrast-high .a11y-skip-link { background: #000000 !important; }
 
+/* Fix: services.html's CTA banner has a stray inline style="background:var(--ink)"
+   baked into its markup (a pre-existing authoring mistake, unrelated to any theme
+   code — confirmed absent from every other page's CTA banner). --ink is a TEXT color
+   token, not a background one; in light theme it happens to be a dark charcoal that
+   coincidentally still looks like a plausible dark banner background, but in
+   dark/high-contrast themes --ink is remapped for text-on-dark-surface use (light
+   colors), so this one banner silently turns white/near-white instead of dark —
+   breaking its own white heading/button text (as low as 1.43:1, confirmed live).
+   Inline styles beat non-!important stylesheet rules regardless of selector
+   specificity, so !important is required here to win back the class's intended
+   background on this one instance (a no-op everywhere else, since it matches what
+   the class already renders). */
+.cta-banner { background: var(--gradient-dark) !important; }
+
 /* ---------- Baseline WCAG fixes (always on, not gated by the menu) ---------- */
 .section p a, .lede a, .card p a, .card-dark p a, .form-note a, .about-copy p a {
   text-decoration: underline;

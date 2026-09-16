@@ -63,26 +63,48 @@
   stroke: #ffffff;
 }
 
-/* ---------- High-contrast mode (WCAG AA/AAA target): black / white / yellow ---------- */
+/* Fix: .eyebrow and .link-arrow use var(--blue), which the dark-theme remap above does
+   NOT touch (it stays the light-theme value, #0071e3). Left alone, that text sits on
+   the now-dark surfaces at ~3.6:1 (verified live via axe-core: link-arrow measured
+   3.61:1 against #1c1c21). Swap to the existing --cyan accent already used elsewhere
+   on dark surfaces (nav/footer/cta phone icons), which clears contrast comfortably.
+   Scoped to exclude high-contrast mode: that theme already sets its own --blue
+   (#66b3ff), independently verified passing, and this selector's higher specificity
+   would otherwise silently override that already-correct value. */
+:root[data-theme="dark"]:not(.a11y-contrast-high) .eyebrow,
+:root[data-theme="dark"]:not(.a11y-contrast-high) .link-arrow {
+  color: #29c1ff;
+}
+
+/* ---------- High-contrast mode (WCAG AA/AAA target): black / white / yellow ----------
+   !important on every token here is required, not decorative: html.a11y-contrast-high
+   (0 IDs, 1 class, 1 type) is LESS specific than the dark-theme remap block above,
+   :root[data-theme="dark"] (0 IDs, 2 "class-level" selectors, 0 type) — a pseudo-class
+   plus an attribute selector together outweigh a class plus a type selector. Since
+   high-contrast mode also sets data-theme="dark" (see a11y.js applyTheme()), both
+   blocks match simultaneously on every element, and without !important the dark-theme
+   values for --white/--off-white/--ink/--gray-900…--gray-100 silently win over the
+   high-contrast values for those same tokens — e.g. .btn-primary's "black-on-white"
+   text/background collapsed to near-white-on-near-white (a real, live-verified bug). */
 html.a11y-contrast-high {
-  --black: #000000;
-  --near-black: #000000;
-  --ink: #ffffff;
-  --white: #000000;
-  --off-white: #000000;
-  --gray-900: #ffffff;
-  --gray-700: #f2f2f2;
-  --gray-500: #e2e2e2;
-  --gray-300: #cfcfcf;
-  --gray-200: #555555;
-  --gray-100: #1a1a1a;
-  --blue: #66b3ff;
-  --blue-dark: #3388ff;
-  --cyan: #7fe6ff;
-  --gradient-brand: #1a73e8;
-  --gradient-dark: #000000;
-  --shadow-soft: none;
-  --shadow-card: none;
+  --black: #000000 !important;
+  --near-black: #000000 !important;
+  --ink: #ffffff !important;
+  --white: #000000 !important;
+  --off-white: #000000 !important;
+  --gray-900: #ffffff !important;
+  --gray-700: #f2f2f2 !important;
+  --gray-500: #e2e2e2 !important;
+  --gray-300: #cfcfcf !important;
+  --gray-200: #555555 !important;
+  --gray-100: #1a1a1a !important;
+  --blue: #66b3ff !important;
+  --blue-dark: #3388ff !important;
+  --cyan: #7fe6ff !important;
+  --gradient-brand: #1a73e8 !important;
+  --gradient-dark: #000000 !important;
+  --shadow-soft: none !important;
+  --shadow-card: none !important;
 }
 html.a11y-contrast-high * { text-shadow: none !important; box-shadow: none !important; }
 html.a11y-contrast-high body { background: #000 !important; }
@@ -91,9 +113,39 @@ html.a11y-contrast-high .btn { border: 2px solid #fff !important; }
 html.a11y-contrast-high .card,
 html.a11y-contrast-high .card-dark,
 html.a11y-contrast-high .form-card { border: 2px solid #fff !important; }
+/* Fix: .btn-accent is a <a> link, so the blanket "a" rule above forces its text to
+   yellow (#ffd400). Its background comes from --gradient-brand, which in this mode
+   resolves to a solid blue (#1a73e8) rather than black — yellow-on-blue measures
+   3.15:1, well under the 4.5:1 minimum (verified live via axe-core). Force the
+   background to black here too, matching every other high-contrast button, which
+   restores the theme's yellow-on-black contrast (14.67:1). */
+html.a11y-contrast-high .btn-accent { background: #000000 !important; }
 
 /* ---------- Baseline WCAG fixes (always on, not gated by the menu) ---------- */
 .section p a, .lede a, .card p a, .card-dark p a, .form-note a, .about-copy p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Fix: de-emphasized footer/breadcrumb text set with a low white-opacity (0.35–0.45)
+   against the site's permanently-dark --black background (#0a0a0c) — present on every
+   page, regardless of theme, since the footer never changes with the theme toggle.
+   Verified live via axe-core (color-contrast, serious) at 3.15–4.48:1; 0.6 clears
+   4.5:1 with margin (7.30:1) and matches the opacity already used for de-emphasized
+   text elsewhere on dark surfaces in this codebase (.cta-banner p, .section-dark p). */
+.footer-brand p,
+.footer-phone span,
+.footer-bottom,
+.breadcrumb {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Fix: the breadcrumb's "Home" link has no visual distinction (same color, no
+   underline, same weight) from the surrounding "/ Page Name" text, so a sighted
+   mouse user can't tell it's a link (WCAG 1.4.1 / link-in-text-block, flagged by
+   axe-core as "incomplete" on every subpage with a breadcrumb — confirmed a real
+   issue via direct computed-style inspection, not a tooling false positive). */
+.breadcrumb a {
   text-decoration: underline;
   text-underline-offset: 2px;
 }

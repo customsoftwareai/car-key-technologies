@@ -120,6 +120,15 @@ html.a11y-contrast-high .form-card { border: 2px solid #fff !important; }
    background to black here too, matching every other high-contrast button, which
    restores the theme's yellow-on-black contrast (14.67:1). */
 html.a11y-contrast-high .btn-accent { background: #000000 !important; }
+/* Fix: .btn-primary is also a <a> link, so the same blanket rule forces its text
+   yellow — but its background is var(--ink), which resolves to WHITE in this mode
+   (by design: it's the theme's one light/inverted button). Yellow-on-white measures
+   1.43:1, effectively invisible. NOTE: axe-core did not flag this — it silently
+   skips color-contrast checks on :visited links (a documented browser-privacy
+   limitation), and this link (href="partners.html") had been visited during
+   testing. Found only by manually computing contrast on every button-styled link,
+   bypassing that blind spot. Restore the button's intended black text. */
+html.a11y-contrast-high .btn-primary { color: #000000 !important; }
 
 /* ---------- Baseline WCAG fixes (always on, not gated by the menu) ---------- */
 .section p a, .lede a, .card p a, .card-dark p a, .form-note a, .about-copy p a {
